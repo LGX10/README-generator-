@@ -1,8 +1,13 @@
 // TODO: Include packages needed for this application
 import inquirer from 'inquirer';
+import fs from 'fs';
+import path from 'path';
+const generateMarkdown = require("./utils/generateMarkdown");
+
+
 
 // TODO: Create an array of questions for user input
-const questions = inquirer.prompt = ([
+const questions = [
     {
         type: 'input',
         name: 'title',
@@ -11,48 +16,49 @@ const questions = inquirer.prompt = ([
 
     {
         type: 'input',
-        name: 'title',
+        name: 'description',
         message: 'Write your description here!',
     }
 
     {
         type: 'input',
-        name: 'title',
+        name: 'install',
         message: 'Write your install instructions here!',
     }
 
     {
         type: 'input',
-        name: 'title',
+        name: 'usage',
         message: 'Write your usage instructions here!',
     }
 
     {
         type: 'input',
-        name: 'title',
+        name: 'credits',
         message: 'Write your credits here!',
     }
 
     {
-        type: 'list',
-        name: 'title',
+        type: 'checkbox',
         message: 'Select a liscense!',
         name: 'liscense',
-        choices: ['red', 'blue', 'green', 'yellow', 'cyan', 'magenta'],
-    }
-
-    {
-      
-
+        choices: ['Apache liscense 2.0', 'MIT Liscense', 'Creative Commons Zero v.10 Universal ', 'Mozilla Public Liscense 2.0', 'Eclipse Public Liscense 2.0', 'Boost Software Liscense 1.0'],
     }
     // Add more questions here
-]);
+];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) { }
+function writeToFile(fileName, data) {
+    return fs.writeFileSync(path.join(process.cwd(), fileName), data);
+ }
 
 // TODO: Create a function to initialize app
 function init() { }
 
 // Function call to initialize app
-init();
+init() {
+    inquirer.prompt(questions).then((responses) => {
+      console.log("Creating Professional README.md File...");
+      writeToFile("./dist/README.md", generateMarkdown({ ...responses }));
+    });
+  }
